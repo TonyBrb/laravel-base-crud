@@ -25,7 +25,7 @@ class FumettiController extends Controller
      */
     public function create()
     {
-        //
+        return view('fumettis.create');
     }
 
     /**
@@ -36,7 +36,16 @@ class FumettiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Salvo dentro data tutti i campi del form inviati nella request
+        $data= $request->all();
+
+        $new_fumetto = new Fumetti();
+        $new_fumetto->title = $data['title'];
+        $new_fumetto->series = $data['series'];
+        $new_fumetto->image = $data['image'];
+        $new_fumetto->description = $data['description'];
+        $new_fumetto->save();
+        return redirect()->route('fumettis.show', $new_fumetto);
     }
 
     /**
@@ -47,7 +56,11 @@ class FumettiController extends Controller
      */
     public function show($id)
     {
-        //
+        $fumettis= Fumetti::find($id);
+        if($fumettis){
+        return view('fumettis.show', compact('fumettis'));
+        }
+        abort(404,'Fumetto non presente nel database');
     }
 
     /**
